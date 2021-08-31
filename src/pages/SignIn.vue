@@ -20,7 +20,7 @@
           ></q-icon>
         </template>
       </q-input>
-    <q-btn unelevated rounded color="primary" name="Login" label="Sign-In" />
+    <q-btn unelevated rounded color="primary" name="Login" label="Sign-In" @click="login" />
      <router-link to=“/SignUp> Move to SignUp </router-link>
   </div>
 </div>
@@ -30,33 +30,44 @@
 
 <script>
 import { defineComponent, ref} from 'vue';
-
+import { auth } from 'src/boot/firebase'
+import { useQuasar } from 'quasar'
 export default defineComponent({
   name: 'PageIndex',
-  // methods: {
-  //   register(){
-  //     console.log("ok");
-  //   }
-  // },
-  setup(){
-    let email = ref('')
-    let name = ref('')
-    let password = ref('')
-    let password2 = ref('')
-    let register = ()=> {
-      console.log("ok" + email.value)
-    // let isPwd = ()=> {
-    //  ref(true)
-    // }
+  setup () {
+    const $q = useQuasar()
+  },
+  data(){
+    return {
+      email: "",
+      name:"",
+      password: "",
+      password2:"",
+      isPwd: true,
+      isPwd2: true
+    };
+  },
+    methods: {
+      login(){
+      auth.signInWithEmailAndPassword(this.email, this.password)
+       .then((userCredential) => {
+        // Signed up
+        var user = userCredential.user;
+        console.log("success", user.email)
+        // ...
+        $q.notify({
+          position : "bottom-left",
+          message : "login success",
+          color : "purple"
+        })
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorMessage)
+      });
+
     }
-    return{
-      email,
-      name,
-      password,
-      password2,
-      register,
-      isPwd: ref(true)
     }
-  }
-})
+  })
 </script>
