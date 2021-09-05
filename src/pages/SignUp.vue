@@ -9,7 +9,7 @@
     </div>
       <q-input standout v-model="email" label="Email" type="email"></q-input>
        <q-input standout v-model="name" label="Your name"></q-input>
-        <q-input v-model="password" label="password" filled :type="isPwd ? 'password' : 'text'" hint="Password with toggle">
+        <q-input v-model="password" label="password" filled :type="isPwd ? 'password' : 'text'" hint='Please enter at least 6 characters' >
         <template v-slot:append>
           <q-icon
             :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -18,7 +18,7 @@
           ></q-icon>
         </template>
       </q-input>
-        <q-input v-model="password2" label="confirm password" filled :type="isPwd2 ? 'password' : 'text'" hint="Password with toggle">
+        <q-input v-model="password2" label="confirm password" filled :type="isPwd2 ? 'password' : 'text'" >
         <template v-slot:append>
           <q-icon
             :name="isPwd2 ? 'visibility_off' : 'visibility'"
@@ -27,7 +27,7 @@
           ></q-icon>
         </template>
       </q-input>
-         <q-btn color="blue" label="sign-up" @click="login()"></q-btn>
+         <q-btn color="blue" label="sign-up" @click="signup()"></q-btn>
          <router-link to=“/> Move to LogIn </router-link>       ​
               </div>
     </div>
@@ -40,12 +40,14 @@ import { defineComponent, ref } from 'vue';
 import { auth } from 'src/boot/firebase'
 import { useQuasar } from 'quasar'
 
+
+
 export default defineComponent({
   name: 'PageIndex',
   setup () {
     const $q = useQuasar()
-  },
-  data(){
+  }, 
+    data(){
     return {
       email: "",
       name:"",
@@ -56,26 +58,33 @@ export default defineComponent({
     };
   },
     methods: {
-      login(){
+      signup(){
       auth.createUserWithEmailAndPassword(this.email, this.password)
        .then((userCredential) => {
         // Signed up
         var user = userCredential.user;
         console.log("success", user.email)
-        
+        console.log(user);
+        console.log(this.name);
         // ...
-        $q.notify({
+        this.$store.commit("setFireUser", this.name);
+        this.$q.notify({
           position : "bottom-left",
-          message : "login success",
+          message : "success",
           color : "purple"
         })
+        this.$router.push({ path: '/' })
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(errorMessage)
+        this.$q.notify({
+          position : "bottom-left",
+          message : errorMessage,
+          color : "purple"
+        })
       });
-
     }
     }
   })

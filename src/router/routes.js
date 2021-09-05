@@ -1,3 +1,8 @@
+// import Vue from 'vue'
+// import VueRouter from 'vue-router'
+
+
+// Vue.useAttrs(VueRouter)
 
 const routes = [
   {
@@ -5,7 +10,8 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/SignIn.vue') },
-      { path: '/signup', component: () => import('pages/SignUp.vue') }
+      { path: '/signup', component: () => import('pages/SignUp.vue') },
+      { path: '/home', component: () => import('pages/home.vue')}
     ]
   },
 
@@ -16,5 +22,11 @@ const routes = [
     component: () => import('pages/Error404.vue')
   }
 ]
+
+// const router = new VueRouter({
+//   mode: 'history',
+//   base: process.env.BASE_URL,
+//   rotues
+// })
 
 export default routes

@@ -21,6 +21,7 @@
         </template>
       </q-input>
     <q-btn unelevated rounded color="primary" name="Login" label="Sign-In" @click="login" />
+    <!-- <q-btn unelevated rounded color="primary" name="github" label="Sign-In(github)" @click="github" /> -->
      <router-link to=“/SignUp> Move to SignUp </router-link>
   </div>
 </div>
@@ -31,43 +32,82 @@
 <script>
 import { defineComponent, ref} from 'vue';
 import { auth } from 'src/boot/firebase'
-import { useQuasar } from 'quasar'
+// import { useQuasar } from 'quasar'
+// import { userStore} from 'vuex';
+
 export default defineComponent({
   name: 'PageIndex',
   setup () {
-    const $q = useQuasar()
+    // const $q = useQuasar()
+    // const store = useStore();
   },
   data(){
     return {
       email: "",
-      name:"",
       password: "",
-      password2:"",
       isPwd: true,
-      isPwd2: true
+      isPwd2: true,
     };
   },
     methods: {
       login(){
+      
       auth.signInWithEmailAndPassword(this.email, this.password)
        .then((userCredential) => {
         // Signed up
         var user = userCredential.user;
         console.log("success", user.email)
         // ...
-        $q.notify({
+        this.$store.commit("setFireUser", userCredential.user),
+        // this.$store.commit("setUserName", this.name);
+
+        this.$q.notify({
           position : "bottom-left",
-          message : "login success",
+          message : ("WELCOME" + " " + user.email),
           color : "purple"
         })
+      this.$router.push({ path: 'home' })
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(errorMessage)
+        this.$q.notify({
+          position : "bottom-left",
+          message : errorMessage,
+          color : "purple"
+        })
       });
-
-    }
+    },
+    // github() {
+    //   var provider = new firebase.auth.GithubAuthProvider();
+    //   auth.signInWithPopup(provider)
+    //   .then((result) => {
+    //     /** @type {firebase.auth.OAuthCredential} */
+    //     var credential = result.credential;
+    //     console.log(credential);
+    //     console.log('result', result);
+    //     this.$q.notify({ message : "success" })
+    //     this.$router.push({ path : "home" })
+    //     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+    //     var token = credential.accessToken;
+    //     console.log(token);
+    //     // The signed-in user info.
+    //     var user = result.user;
+    //     // ...
+    //   }).catch((error) => {
+    //     // Handle Errors here.
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    //     console.log(errorCode);
+    //     console.log(errorMessage);
+    //     // The email of the user's account used.
+    //     var email = error.email;
+    //     // The firebase.auth.AuthCredential type that was used.
+    //     var credential = error.credential;
+    //     // ...
+    //   });
+    // }
     }
   })
 </script>
