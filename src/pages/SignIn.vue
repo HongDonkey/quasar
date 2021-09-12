@@ -31,54 +31,68 @@
 
 <script>
 import { defineComponent, ref} from 'vue';
-import { auth } from 'src/boot/firebase'
-// import { useQuasar } from 'quasar'
-// import { userStore} from 'vuex';
+import { auth, db } from 'src/boot/firebase'
+import { useQuasar } from 'quasar'
+import { useRouter, useRoute } from 'vue-router'
+import { useStore, mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'PageIndex',
+
   setup () {
-    // const $q = useQuasar()
-    // const store = useStore();
-  },
-  data(){
-    return {
-      email: "",
-      password: "",
-      isPwd: true,
-      isPwd2: true,
-    };
-  },
-    methods: {
-      login(){
+    const $q = useQuasar()
+    const $store = useStore();
+    const $router = useRouter()
+    const $route = useRoute()
+
+    let email = ref('')
+    let password = ref('')
+    let isPwd = ref(true)
+
+    let login = () => {
       
-      auth.signInWithEmailAndPassword(this.email, this.password)
+      auth.signInWithEmailAndPassword(email.value, password.value)
        .then((userCredential) => {
         // Signed up
         var user = userCredential.user;
         console.log("success", user.email)
+        // console.log(name.value);
         // ...
-        this.$store.commit("setFireUser", userCredential.user),
-        // this.$store.commit("setUserName", this.name);
+        console.log(user);
 
-        this.$q.notify({
+        $store.commit("setFireUser", user),
+
+        
+        $q.notify({
           position : "bottom-left",
-          message : ("WELCOME" + " " + user.email),
+          message : ("WELCOME" + " " + user.email + user.name),
           color : "purple"
         })
-      this.$router.push({ path: 'home' })
+      $router.push({ path: 'home' })
       })
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(errorMessage)
-        this.$q.notify({
+        $q.notify({
           position : "bottom-left",
           message : errorMessage,
           color : "purple"
         })
       });
-    },
+    }
+ return {
+      email,
+      password,
+      isPwd,
+      login
+  }
+  
+  },
+  computed: {
+    ...mapGetters(["getFireUser", "isUserAuth"])
+  }
+   
     // github() {
     //   var provider = new firebase.auth.GithubAuthProvider();
     //   auth.signInWithPopup(provider)
@@ -108,6 +122,5 @@ export default defineComponent({
     //     // ...
     //   });
     // }
-    }
   })
 </script>
