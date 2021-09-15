@@ -55,12 +55,13 @@ export default defineComponent({
        .then((userCredential) => {
         // Signed up
         var user = userCredential.user;
-        console.log("success", user.email)
+        console.log("success", user)
         // console.log(name.value);
         // ...
         console.log(user);
 
-        $store.commit("setFireUser", user),
+        $store.commit("setFireUser", user)
+        console.log(auth);
 
         
         $q.notify({
