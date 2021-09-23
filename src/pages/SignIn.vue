@@ -20,6 +20,7 @@
           ></q-icon>
         </template>
       </q-input>
+      <q-checkbox v-model="remember" label="Remember Me" color="teal"/>
     <q-btn unelevated rounded color="primary" name="Login" label="Sign-In" @click="login" />
     <!-- <q-btn unelevated rounded color="primary" name="github" label="Sign-In(github)" @click="github" /> -->
      <router-link to=“/SignUp> Move to SignUp </router-link>
@@ -48,6 +49,7 @@ export default defineComponent({
     let email = ref('')
     let password = ref('')
     let isPwd = ref(true)
+    let remember = ref(false)
 
     let login = () => {
       
@@ -69,6 +71,13 @@ export default defineComponent({
           message : ("WELCOME" + " " + user.email + user.name),
           color : "purple"
         })
+        if (remember.value == true) {
+          localStorage.username = email.value;
+          localStorage.checkbox = remember.value;
+        } else {
+          localStorage.username = "";
+          localStorage.checkbox = "";
+        }
       $router.push({ path: 'home' })
       })
       .catch((error) => {
@@ -82,13 +91,23 @@ export default defineComponent({
         })
       });
     }
+    
  return {
       email,
       password,
       isPwd,
-      login
+      login,
+      remember
   }
   
+  },
+  mounted(){
+    if(localStorage.checkbox && localStorage.checkbox !==""){
+      this.remember = true
+      this.email = localStorage.username
+    } else {
+      this.remember = false
+    }
   },
   computed: {
     ...mapGetters(["getFireUser", "isUserAuth"])

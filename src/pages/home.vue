@@ -58,39 +58,39 @@ export default defineComponent({
     };
   },
 
-  updated() {
-    if (this.getFireUser != null && this.userName == "") {
-      console.log("11");
-      db.collection("users")
-        .where("id", "==", this.getFireUser.email)
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots​
-            console.log(doc.id, " => ", doc.data());
-            this.name = doc.data().name;
-          });
-        })
-        .catch((error) => {
-          console.log("Error getting Documents:", error);
-        });
-    }
-  },
+  // updated() {
+  //   if (this.getFireUser != null && this.userName == "") {
+  //     console.log("11");
+  //     db.collection("users")
+  //       .where("id", "==", this.getFireUser.email)
+  //       .get()
+  //       .then((querySnapshot) => {
+  //         querySnapshot.forEach((doc) => {
+  //           // doc.data() is never undefined for query doc snapshots​
+  //           console.log(doc.id, " => ", doc.data());
+  //           this.name = doc.data().name;
+  //         });
+  //       })
+  //       .catch((error) => {
+  //         console.log("Error getting Documents:", error);
+  //       });
+  //   }
+  // },
 
   mounted() {
     this.authAction();
     console.log("mounted called");
     console.log(this.getFireUser);
-    db.collection("users")
-      .where("id", "==", this.getFireUser.email)
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots​
-          console.log(doc.id, " => ", doc.data());
-          this.userName = doc.data().name;
-        });
-      });
+    // db.collection("users")
+    //   .where("id", "==", this.getFireUser.email)
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       // doc.data() is never undefined for query doc snapshots​
+    //       console.log(doc.id, " => ", doc.data());
+    //       this.userName = doc.data().name;
+    //     });
+    //   });
   },
 
   coumputed: {
