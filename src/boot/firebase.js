@@ -18,5 +18,5 @@ if(!firebase.apps.length) {
 }
 
 export const auth = firebase.auth();
-export const g_auth = firebase.auth;
+export const g_auth = firebase.auth; // 스태틱 인스턴스에 접근하기 위하여 추가함
 export const db = firebase.firestore()
