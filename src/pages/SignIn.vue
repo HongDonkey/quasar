@@ -58,6 +58,7 @@ export default defineComponent({
     let password = ref('')
     let isPwd = ref(true)
     let remember = ref(false)
+    
 
 
     
@@ -83,8 +84,7 @@ export default defineComponent({
    
   methods: {
 
-      login(){
-      
+      login(){      
       auth.signInWithEmailAndPassword(this.email, this.password)
        .then((userCredential) => {
         // Signed up
@@ -97,6 +97,12 @@ export default defineComponent({
         this.$store.commit("setFireUser", user)
         console.log(auth);
 
+        var cdate=Date.now()
+        db.collection("users").add({
+          email : user.email,
+          name : user.email,
+          date : cdate
+        })
         
         this.$q.notify({
           position : "bottom-left",
